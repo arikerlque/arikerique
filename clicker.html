@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Coin Clicker</title>
+  <link rel="stylesheet" href="css/clicker.css" />
+</head>
+<body>
+  <div class="game-container">
+    <h1>Coin Clicker</h1>
+    <h2 id="coin-count">Coins: 0</h2>
+    <button id="click-button">Click Me!</button>
+
+    <div class="shop">
+      <h3>Upgrades</h3>
+      <div class="upgrade">
+        <button id="auto-clicker-btn">Buy Auto Clicker (10 coins)</button>
+        <p id="auto-clicker-count">Owned: 0</p>
+      </div>
+      <div class="upgrade">
+        <button id="double-click-btn">Buy Double Clicks (20 coins)</button>
+        <p id="double-click-count">Level: 1</p>
+      </div>
+    </div>
+
+    <div class="save-manual">
+      <button id="save-now">💾 Save Now</button>
+    </div>
+
+    <div id="afk-message" class="hidden">
+      <p>You earned <span id="afk-coins">0</span> coins while you were gone!</p>
+      <button id="claim-afk">Claim</button>
+    </div>
+  </div>
+
+  <audio id="coin-sound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_7b08ec27d2.mp3?filename=coins-49636.mp3"></audio>
+  <audio id="click-sound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c35aa32a01.mp3?filename=mouse-click-153941.mp3"></audio>
+  <div id="auto-clicker-visuals" class="clicker-row"></div>
+
+
+  <script src="js/clicker.js"></script>
+</body>
+</html>

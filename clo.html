@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>arikerique's epic clicker</title>
+    <!-- The style.css file allows you to change the look of your web pages.
+         If you include the next line in all your web pages, they will all share the same look.
+         This makes it easier to make new pages for your site. -->
+    <link href="/style.css" rel="stylesheet" type="text/css" media="all">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="icon" href="https://static-00.iconduck.com/assets.00/click-icon-1024x1024-wbql9eg8.png">
+  </head>
+  <body>
+      <p> <a href="/index">home</a></p>
+
+<style>
+  body { 
+    background-color: powderblue; 
+    font-size: 30px;
+    text-align: center;
+  }
+  #button {
+    width: 200px;
+    height: 200px;
+    background-color: blue;
+    border-radius: 100px;
+    margin: 0 auto;
+    line-height: 200px;
+    user-select: none;
+    margin-top: 100px;
+  }
+  #score {
+    margin-top: 50px;
+    font-size: 60px;
+    font-weight: bold;
+    color: white;
+  }
+</style>
+<div id="score">0</div>
+<div id="button">click</div>
+<script>
+  let counter = 0;
+  
+  document.getElementById('button').onclick = () => {
+    counter = counter + 1;
+    document.getElementById('score').innerText = counter;
+  };
+</script>
+  </body>
+</html>

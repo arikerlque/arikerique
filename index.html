@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ARIK3RIQU3's "epic" web</title>
+  <link href="/style.css" rel="stylesheet" type="text/css" media="all">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background: url(https://arikerique.neocities.org/images/img.jpg) no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 40px 30px;
+      max-width: 600px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+      overflow-wrap: break-word;
+    }
+
+    h1, h2 {
+      margin: 0 0 20px 0;
+      padding: 0;
+    }
+
+    h1 {
+      font-size: 2.5em;
+    }
+
+    h2#greeting {
+      font-size: 1.5em;
+      font-weight: 500;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    ul li {
+      margin: 10px 0;
+    }
+
+    a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.2s ease-in-out;
+    }
+
+    a:hover {
+      color: #ffcc00;
+    }
+
+    #auth-button {
+      margin-top: 30px;
+      padding: 15px 40px;
+      font-size: 1.1em;
+      border: none;
+      border-radius: 50px;
+      font-weight: 700;
+      cursor: pointer;
+      background: white;
+      color: black;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      display: inline-block;
+      white-space: nowrap;
+      min-width: 160px;
+      text-align: center;
+    }
+
+    #auth-button:hover {
+      background: #ffcc00;
+      color: black;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>arikeriques web</h1>
+    <h2 id="greeting">Hello</h2>
+
+    <p><strong>Website Locations!!</strong></p>
+    <ul>
+      <li><a href="/clicker">Coin Clicker</a></li>
+      <li><a href="/community">Forums</a></li>
+      <li><a href="/profile.html">Your Profile</a></li>
+    </ul>
+
+    <button id="auth-button">Logout</button>
+  </div>
+
+  <script src="/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Your Profile</title>
+  <link rel="stylesheet" href="/css/style5.css">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: url('https://arikerique.neocities.org/images/img.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      margin: 0;
+      padding: 0;
+    }
+
+    .wrapper {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 30px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      color: white;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+
+    textarea {
+      resize: none;
+      border-radius: 10px;
+      padding: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin-top: 10px;
+      border-radius: 20px;
+      border: none;
+      background: white;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #ffcc00;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <h1 id="profile-title">Your Profile</h1>
+    <p><strong>Username:</strong> <span id="profile-username"></span></p>
+    <p><strong>Account Created:</strong> <span id="profile-date"></span></p>
+
+    <hr>
+
+    <div id="profile-pic-container">
+      <img id="profile-pic" src="" alt="Your profile picture" style="width:120px; height:120px; border-radius:50%; object-fit:cover;">
+      <br>
+      <input type="file" id="pic-upload">
+    </div>
+
+    <hr>
+
+    <label for="bio">Your Bio:</label><br>
+    <textarea id="bio" rows="4" cols="40" placeholder="Write something cool about yourself..."></textarea>
+    <br>
+    <button onclick="saveBio()">Save Bio</button>
+
+    <hr>
+
+    <label for="theme-color">Choose Theme Color:</label>
+    <input type="color" id="theme-color" value="#ffffff">
+    <button onclick="saveTheme()">Save Theme</button>
+
+    <hr>
+
+    <p><strong>Title:</strong> <span id="user-title"></span></p>
+    <select id="title-select">
+      <option value="Epic Developer">Epic Developer</option>
+      <option value="Neon Hacker">Neon Hacker</option>
+      <option value="Code Wizard">Code Wizard</option>
+      <option value="Stealthy Booper">Stealthy Booper</option>
+    </select>
+    <button onclick="saveTitle()">Save Title</button>
+
+    <br><br>
+    <button onclick="goHome()">Back to Home</button>
+  </div>
+
+  <script src="/js/main.js"></script>
+</body>
+</html>
