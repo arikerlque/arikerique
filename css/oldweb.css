@@ -1,0 +1,33 @@
+body {
+  background-image: url(https://wparena.com/wp-content/uploads/2009/09/img2.jpg);
+  background-color: black;
+  color: white;
+  font-family: Verdana;
+}
+
+.center-screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+/* unvisited link */
+a:link {
+  color: white;
+}
+
+/* visited link */
+a:visited {
+  color: white;
+}
+
+/* mouse over link */
+a:hover {
+  color: Aqua;
+}
+
+/* selected link */
+a:active {
+  color: blue;
+}

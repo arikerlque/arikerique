@@ -1,0 +1,116 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  background: url('https://arikerique.neocities.org/images/img.jpg') no-repeat center center fixed;
+  background-size: cover;
+  overflow-x: hidden;
+}
+
+.game-container {
+  max-width: 400px;
+  margin: 60px auto 20px auto;
+  padding: 30px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  color: white;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+
+h1 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+h2 {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  margin: 10px auto;
+  border: none;
+  border-radius: 30px;
+  background-color: #ffcc00;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: block;
+}
+
+button:hover {
+  transform: scale(1.05);
+  background-color: #ffd633;
+}
+
+.shop {
+  margin-top: 20px;
+}
+
+.shop .upgrade {
+  margin: 10px 0;
+}
+
+.save-manual {
+  margin-top: 20px;
+}
+
+#afk-message {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 12px;
+  border-radius: 10px;
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.hidden {
+  display: none;
+}
+
+.clicker-row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  flex-direction: row;
+  margin: 30px 10px;
+  gap: 4px;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.visual-clicker {
+  position: relative;
+  width: 24px;
+  height: 24px;
+}
+
+.visual-clicker img.coin {
+  width: 100%;
+  height: auto;
+}
+
+.visual-clicker img.cursor {
+  position: absolute;
+  width: 12px;
+  top: -8px;
+  left: 6px;
+  animation: clicky 1s infinite;
+}
+
+@keyframes clicky {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(1px, 1px) rotate(-10deg); }
+  50% { transform: translate(0, 0) rotate(0deg); }
+  75% { transform: translate(1px, 1px) rotate(10deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
