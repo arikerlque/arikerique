@@ -1,21 +1,14 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Your Profile</title>
-  <link rel="stylesheet" href="/css/style5.css">
+  <link href="style5.css" rel="stylesheet" />
   <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: url('https://arikerique.neocities.org/images/img.jpg') no-repeat center center fixed;
-      background-size: cover;
-      color: white;
-      margin: 0;
-      padding: 0;
-    }
-
-    .wrapper {
-      max-width: 600px;
+    .profile-container {
+      max-width: 500px;
       margin: 50px auto;
       padding: 30px;
       border-radius: 20px;
@@ -23,74 +16,122 @@
       backdrop-filter: blur(10px);
       color: white;
       text-align: center;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
     }
 
-    textarea {
-      resize: none;
-      border-radius: 10px;
+    .profile-section {
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    textarea, input[type="text"], select {
+      width: 100%;
       padding: 10px;
+      border-radius: 10px;
+      border: none;
+      margin-top: 5px;
+      background-color: rgba(255,255,255,0.2);
+      color: white;
     }
 
-    button {
-      padding: 10px 20px;
+    .styled-button, input[type="submit"], button {
       margin-top: 10px;
-      border-radius: 20px;
-      border: none;
-      background: white;
+      padding: 10px 20px;
+      border-radius: 10px;
+      background-color: #ffffffcc;
       color: black;
       font-weight: bold;
+      border: none;
       cursor: pointer;
-      transition: 0.3s;
     }
 
-    button:hover {
-      background: #ffcc00;
+    input[type="color"] {
+      padding: 0;
+      height: 40px;
+      width: 60px;
+      border: none;
+      border-radius: 5px;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .file-upload-label {
+      background-color: #ffffffcc;
+      color: black;
+      font-weight: bold;
+      padding: 10px 20px;
+      border-radius: 10px;
+      display: inline-block;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    #preview {
+      margin-top: 10px;
+      max-height: 100px;
+      border-radius: 10px;
     }
   </style>
 </head>
-<body>
-  <div class="wrapper">
-    <h1 id="profile-title">Your Profile</h1>
-    <p><strong>Username:</strong> <span id="profile-username"></span></p>
-    <p><strong>Account Created:</strong> <span id="profile-date"></span></p>
+<body class="background">
+  <div class="profile-container">
+    <h1>Your Profile</h1>
+    <p><strong>Username:</strong> <span id="username">arikerique</span></p>
+    <p><strong>Account Created:</strong> 6/16/2025, 8:44:21 PM</p>
 
-    <hr>
-
-    <div id="profile-pic-container">
-      <img id="profile-pic" src="" alt="Your profile picture" style="width:120px; height:120px; border-radius:50%; object-fit:cover;">
-      <br>
-      <input type="file" id="pic-upload">
+    <div class="profile-section">
+      <label for="profile-picture">Your Profile Picture</label>
+      <label class="file-upload-label" for="profile-picture">Choose File</label>
+      <input type="file" id="profile-picture" accept="image/*">
+      <br><img id="preview" src="#" alt="Preview" style="display:none;" />
     </div>
 
-    <hr>
+    <div class="profile-section">
+      <label for="bio">Your Bio:</label>
+      <textarea id="bio" rows="4" placeholder="Write something cool about yourself..."></textarea>
+      <button class="styled-button" id="save-bio">Save Bio</button>
+    </div>
 
-    <label for="bio">Your Bio:</label><br>
-    <textarea id="bio" rows="4" cols="40" placeholder="Write something cool about yourself..."></textarea>
-    <br>
-    <button onclick="saveBio()">Save Bio</button>
+    <div class="profile-section">
+      <label for="theme-color">Choose Theme Color:</label>
+      <input type="color" id="theme-color" />
+      <button class="styled-button" id="save-theme">Save Theme</button>
+    </div>
 
-    <hr>
+    <div class="profile-section">
+      <label for="title-select">Title:</label>
+      <select id="title-select">
+        <option>Neon Hacker</option>
+        <option>Pixel Paladin</option>
+        <option>Code Wizard</option>
+      </select>
+      <button class="styled-button" id="save-title">Save Title</button>
+    </div>
 
-    <label for="theme-color">Choose Theme Color:</label>
-    <input type="color" id="theme-color" value="#ffffff">
-    <button onclick="saveTheme()">Save Theme</button>
-
-    <hr>
-
-    <p><strong>Title:</strong> <span id="user-title"></span></p>
-    <select id="title-select">
-      <option value="Epic Developer">Epic Developer</option>
-      <option value="Neon Hacker">Neon Hacker</option>
-      <option value="Code Wizard">Code Wizard</option>
-      <option value="Stealthy Booper">Stealthy Booper</option>
-    </select>
-    <button onclick="saveTitle()">Save Title</button>
-
-    <br><br>
-    <button onclick="goHome()">Back to Home</button>
+    <button class="styled-button" onclick="location.href='index.html'">Back to Home</button>
   </div>
 
-  <script src="/js/main.js"></script>
+  <script>
+    const fileInput = document.getElementById("profile-picture");
+    const preview = document.getElementById("preview");
+
+    fileInput.addEventListener("change", () => {
+      const file = fileInput.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          preview.src = e.target.result;
+          preview.style.display = "block";
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  </script>
 </body>
 </html>
