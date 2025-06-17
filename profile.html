@@ -5,79 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Your Profile</title>
-  <link href="css/style5.css" rel="stylesheet" />
-  <style>
-    .profile-container {
-      max-width: 500px;
-      margin: 50px auto;
-      padding: 30px;
-      border-radius: 20px;
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      color: white;
-      text-align: center;
-    }
-
-    .profile-section {
-      margin-bottom: 25px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 10px;
-      font-weight: bold;
-    }
-
-    textarea, input[type="text"], select {
-      width: 100%;
-      padding: 10px;
-      border-radius: 10px;
-      border: none;
-      margin-top: 5px;
-      background-color: rgba(255,255,255,0.2);
-      color: white;
-    }
-
-    .styled-button, input[type="submit"], button {
-      margin-top: 10px;
-      padding: 10px 20px;
-      border-radius: 10px;
-      background-color: #ffffffcc;
-      color: black;
-      font-weight: bold;
-      border: none;
-      cursor: pointer;
-    }
-
-    input[type="color"] {
-      padding: 0;
-      height: 40px;
-      width: 60px;
-      border: none;
-      border-radius: 5px;
-    }
-
-    input[type="file"] {
-      display: none;
-    }
-
-    .file-upload-label {
-      background-color: #ffffffcc;
-      color: black;
-      font-weight: bold;
-      padding: 10px 20px;
-      border-radius: 10px;
-      display: inline-block;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-
-    #preview {
-      margin-top: 10px;
-      max-height: 100px;
-      border-radius: 10px;
-    }
-  </style>
+  <link href="style5.css" rel="stylesheet" />
 </head>
 <body class="background">
   <div class="profile-container">
@@ -130,6 +58,26 @@
           preview.style.display = "block";
         };
         reader.readAsDataURL(file);
+      }
+    });
+
+    // === Theme Color Save/Load ===
+    document.addEventListener("DOMContentLoaded", () => {
+      const colorInput = document.getElementById("theme-color");
+      const saveThemeBtn = document.getElementById("save-theme");
+
+      if (colorInput && saveThemeBtn) {
+        const savedColor = localStorage.getItem("themeColor");
+        if (savedColor) {
+          document.documentElement.style.setProperty("--theme-accent", savedColor);
+          colorInput.value = savedColor;
+        }
+
+        saveThemeBtn.addEventListener("click", () => {
+          const color = colorInput.value;
+          localStorage.setItem("themeColor", color);
+          document.documentElement.style.setProperty("--theme-accent", color);
+        });
       }
     });
   </script>
