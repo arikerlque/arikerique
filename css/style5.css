@@ -20,6 +20,7 @@ body {
   background: purple;
   color: #fff;
   border-radius: 10px;
+  backdrop-filter: blur(10px);
   padding: 30px 40px;
   opacity: 0.45;
 }
