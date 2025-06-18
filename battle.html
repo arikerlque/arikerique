@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Custom Battle - Phase 1</title>
+  <style>
+    body {
+      background-color: black;
+      margin: 0;
+      overflow: hidden;
+      color: white;
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    #gameContainer {
+      width: 800px;
+      height: 600px;
+      margin: 0 auto;
+      padding-top: 20px;
+      text-align: center;
+    }
+
+    #battleBox {
+      position: relative;
+      width: 400px;
+      height: 200px;
+      border: 4px solid white;
+      margin: 0 auto;
+      background-color: #000;
+      overflow: hidden;
+    }
+
+    #soul {
+      width: 20px;
+      height: 20px;
+      background-color: red;
+      position: absolute;
+      top: 90px;
+      left: 190px;
+      border-radius: 50%;
+    }
+
+    #hpBarContainer {
+      width: 300px;
+      height: 20px;
+      background-color: #444;
+      border: 2px solid white;
+      margin: 20px auto;
+    }
+
+    #hpBar {
+      height: 100%;
+      background-color: limegreen;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="gameContainer">
+    <div id="hpBarContainer"><div id="hpBar"></div></div>
+    <div id="battleBox">
+      <div id="soul"></div>
+    </div>
+  </div>
+
+  <script src="battle.js"></script>
+</body>
+</html>
