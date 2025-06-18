@@ -1,41 +1,45 @@
-// battle.js with death logic
 
-const canvas = document.getElementById('battleCanvas');
-const ctx = canvas.getContext('2d');
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
 
 canvas.width = 600;
 canvas.height = 400;
 
 let player = {
-  x: 275,
-  y: 300,
+  x: canvas.width / 2 - 10,
+  y: canvas.height / 2 - 10,
   width: 20,
   height: 20,
   speed: 4,
   color: "red",
-  dx: 0,
-  dy: 0
+  hp: 92,
+  maxHp: 92,
+  isDead: false
 };
 
 let keys = {};
-let maxHP = 92;
-let currentHP = maxHP;
-let isDead = false;
 
-let bones = [];
-let boneSpeed = 2;
-let damageCooldown = 0;
+document.addEventListener("keydown", function (e) {
+  keys[e.key] = true;
+});
 
-// Death screen
-function drawDeathScreen() {
-  ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = "white";
-  ctx.font = "30px Arial";
-  ctx.textAlign = "center";
-  ctx.fillText("YOU DIED", canvas.width / 2, canvas.height / 2);
-  ctx.font = "16px Arial";
-  ctx.fillText("Refresh to try again", canvas.width / 2, canvas.height / 2 + 30);
+document.addEventListener("keyup", function (e) {
+  keys[e.key] = false;
+});
+
+function updatePlayer() {
+  if (player.isDead) return;
+
+  if (keys["ArrowUp"] || keys["w"] || keys["W"]) player.y -= player.speed;
+  if (keys["ArrowDown"] || keys["s"] || keys["S"]) player.y += player.speed;
+  if (keys["ArrowLeft"] || keys["a"] || keys["A"]) player.x -= player.speed;
+  if (keys["ArrowRight"] || keys["d"] || keys["D"]) player.x += player.speed;
+
+  // Boundary conditions
+  if (player.x < 0) player.x = 0;
+  if (player.y < 0) player.y = 0;
+  if (player.x + player.width > canvas.width) player.x = canvas.width - player.width;
+  if (player.y + player.height > canvas.height) player.y = canvas.height - player.height;
 }
 
 function drawPlayer() {
@@ -43,107 +47,78 @@ function drawPlayer() {
   ctx.fillRect(player.x, player.y, player.width, player.height);
 }
 
-function movePlayer() {
-  if (keys['ArrowLeft']) player.dx = -player.speed;
-  else if (keys['ArrowRight']) player.dx = player.speed;
-  else player.dx = 0;
-
-  if (keys['ArrowUp']) player.dy = -player.speed;
-  else if (keys['ArrowDown']) player.dy = player.speed;
-  else player.dy = 0;
-
-  player.x += player.dx;
-  player.y += player.dy;
-
-  // boundaries
-  player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
-  player.y = Math.max(0, Math.min(canvas.height - player.height, player.y));
-}
-
 function drawHealthBar() {
-  const barWidth = 150;
-  const barHeight = 20;
-  const x = 10;
-  const y = 10;
-
   ctx.strokeStyle = "white";
-  ctx.strokeRect(x, y, barWidth, barHeight);
-
+  ctx.strokeRect(20, 20, 200, 20);
   ctx.fillStyle = "orange";
-  ctx.fillRect(x, y, (currentHP / maxHP) * barWidth, barHeight);
+  ctx.fillRect(20, 20, (player.hp / player.maxHp) * 200, 20);
 }
+
+let bones = [];
+let boneCooldown = 0;
 
 function spawnBone() {
-  bones.push({
-    x: Math.random() * (canvas.width - 10),
-    y: canvas.height,
-    width: 10,
-    height: 30
-  });
+  bones.push({ x: Math.random() * (canvas.width - 10), y: canvas.height, width: 10, height: 30, speed: 3 });
+}
+
+function updateBones() {
+  for (let i = 0; i < bones.length; i++) {
+    bones[i].y -= bones[i].speed;
+
+    // Collision detection
+    if (
+      !player.isDead &&
+      boneCooldown <= 0 &&
+      bones[i].x < player.x + player.width &&
+      bones[i].x + bones[i].width > player.x &&
+      bones[i].y < player.y + player.height &&
+      bones[i].y + bones[i].height > player.y
+    ) {
+      player.hp -= 10;
+      boneCooldown = 30;
+      if (player.hp <= 0) {
+        player.hp = 0;
+        player.isDead = true;
+      }
+    }
+  }
+  bones = bones.filter(b => b.y + b.height > 0);
+  if (boneCooldown > 0) boneCooldown--;
 }
 
 function drawBones() {
   ctx.fillStyle = "white";
-  for (let bone of bones) {
-    ctx.fillRect(bone.x, bone.y, bone.width, bone.height);
+  for (let b of bones) {
+    ctx.fillRect(b.x, b.y, b.width, b.height);
   }
 }
 
-function moveBones() {
-  for (let bone of bones) {
-    bone.y -= boneSpeed;
-  }
-  bones = bones.filter(b => b.y + b.height > 0);
+function drawDeathScreen() {
+  ctx.fillStyle = "rgba(0, 0, 0, 0.8)";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "red";
+  ctx.font = "48px sans-serif";
+  ctx.fillText("YOU DIED", canvas.width / 2 - 120, canvas.height / 2);
+  ctx.font = "20px sans-serif";
+  ctx.fillText("Refresh to try again", canvas.width / 2 - 90, canvas.height / 2 + 40);
 }
-
-function checkCollisions() {
-  if (damageCooldown > 0) {
-    damageCooldown--;
-    return;
-  }
-
-  for (let bone of bones) {
-    if (player.x < bone.x + bone.width &&
-        player.x + player.width > bone.x &&
-        player.y < bone.y + bone.height &&
-        player.y + player.height > bone.y) {
-      currentHP -= 10;
-      damageCooldown = 30; // about half a second
-      if (currentHP <= 0) {
-        isDead = true;
-      }
-      break;
-    }
-  }
-}
-
-function update() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  if (isDead) {
-    drawDeathScreen();
-    return;
-  }
-
-  movePlayer();
-  moveBones();
-  checkCollisions();
-
-  drawPlayer();
-  drawBones();
-  drawHealthBar();
-}
-
-document.addEventListener('keydown', e => keys[e.key] = true);
-document.addEventListener('keyup', e => keys[e.key] = false);
-
-setInterval(() => {
-  if (!isDead) spawnBone();
-}, 1000);
 
 function gameLoop() {
-  update();
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  updatePlayer();
+  updateBones();
+
+  drawBones();
+  drawPlayer();
+  drawHealthBar();
+
+  if (player.isDead) {
+    drawDeathScreen();
+  }
+
   requestAnimationFrame(gameLoop);
 }
 
+setInterval(spawnBone, 1000);
 gameLoop();
