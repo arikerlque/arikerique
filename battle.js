@@ -1,94 +1,41 @@
+// battle.js with death logic
 
 const canvas = document.getElementById('battleCanvas');
 const ctx = canvas.getContext('2d');
 
-canvas.focus();
+canvas.width = 600;
+canvas.height = 400;
 
-const player = {
-  x: canvas.width / 2,
-  y: canvas.height / 2,
+let player = {
+  x: 275,
+  y: 300,
   width: 20,
   height: 20,
-  speed: 3,
-  color: 'red',
+  speed: 4,
+  color: "red",
   dx: 0,
-  dy: 0,
-  maxHP: 92,
-  currentHP: 92,
-  lastHitTime: 0
+  dy: 0
 };
 
-const bones = [];
-const boneWidth = 10;
-const boneHeight = 40;
-const boneSpeed = 2;
-const boneSpawnRate = 60; // frames
+let keys = {};
+let maxHP = 92;
+let currentHP = maxHP;
+let isDead = false;
 
-let frameCount = 0;
+let bones = [];
+let boneSpeed = 2;
+let damageCooldown = 0;
 
-const keys = {};
-
-window.addEventListener('keydown', (e) => {
-  keys[e.key] = true;
-});
-
-window.addEventListener('keyup', (e) => {
-  keys[e.key] = false;
-});
-
-function spawnBone() {
-  const x = Math.random() * (canvas.width - boneWidth);
-  bones.push({ x, y: canvas.height, width: boneWidth, height: boneHeight });
-}
-
-function updateBones() {
-  for (let i = bones.length - 1; i >= 0; i--) {
-    bones[i].y -= boneSpeed;
-    if (bones[i].y + bones[i].height < 0) {
-      bones.splice(i, 1);
-    }
-  }
-}
-
-function checkBoneCollision() {
-  const now = Date.now();
-  for (const bone of bones) {
-    if (
-      player.x < bone.x + bone.width &&
-      player.x + player.width > bone.x &&
-      player.y < bone.y + bone.height &&
-      player.y + player.height > bone.y
-    ) {
-      if (now - player.lastHitTime > 1000) {
-        player.currentHP = Math.max(0, player.currentHP - 10);
-        player.lastHitTime = now;
-      }
-    }
-  }
-}
-
-function update() {
-  player.dx = 0;
-  player.dy = 0;
-  if (keys['ArrowLeft'] || keys['a']) player.dx = -player.speed;
-  if (keys['ArrowRight'] || keys['d']) player.dx = player.speed;
-  if (keys['ArrowUp'] || keys['w']) player.dy = -player.speed;
-  if (keys['ArrowDown'] || keys['s']) player.dy = player.speed;
-
-  player.x += player.dx;
-  player.y += player.dy;
-
-  player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
-  player.y = Math.max(0, Math.min(canvas.height - player.height, player.y));
-
-  updateBones();
-  checkBoneCollision();
-
-  if (frameCount % boneSpawnRate === 0) {
-    spawnBone();
-  }
-
-  frameCount++;
+// Death screen
+function drawDeathScreen() {
+  ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "white";
+  ctx.font = "30px Arial";
+  ctx.textAlign = "center";
+  ctx.fillText("YOU DIED", canvas.width / 2, canvas.height / 2);
+  ctx.font = "16px Arial";
+  ctx.fillText("Refresh to try again", canvas.width / 2, canvas.height / 2 + 30);
 }
 
 function drawPlayer() {
@@ -96,33 +43,106 @@ function drawPlayer() {
   ctx.fillRect(player.x, player.y, player.width, player.height);
 }
 
+function movePlayer() {
+  if (keys['ArrowLeft']) player.dx = -player.speed;
+  else if (keys['ArrowRight']) player.dx = player.speed;
+  else player.dx = 0;
+
+  if (keys['ArrowUp']) player.dy = -player.speed;
+  else if (keys['ArrowDown']) player.dy = player.speed;
+  else player.dy = 0;
+
+  player.x += player.dx;
+  player.y += player.dy;
+
+  // boundaries
+  player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
+  player.y = Math.max(0, Math.min(canvas.height - player.height, player.y));
+}
+
 function drawHealthBar() {
-  const barWidth = 200;
+  const barWidth = 150;
   const barHeight = 20;
   const x = 10;
   const y = 10;
 
-  ctx.strokeStyle = 'white';
+  ctx.strokeStyle = "white";
   ctx.strokeRect(x, y, barWidth, barHeight);
 
-  const hpRatio = player.currentHP / player.maxHP;
-  ctx.fillStyle = 'orange';
-  ctx.fillRect(x, y, barWidth * hpRatio, barHeight);
+  ctx.fillStyle = "orange";
+  ctx.fillRect(x, y, (currentHP / maxHP) * barWidth, barHeight);
+}
+
+function spawnBone() {
+  bones.push({
+    x: Math.random() * (canvas.width - 10),
+    y: canvas.height,
+    width: 10,
+    height: 30
+  });
 }
 
 function drawBones() {
-  ctx.fillStyle = 'white';
-  for (const bone of bones) {
+  ctx.fillStyle = "white";
+  for (let bone of bones) {
     ctx.fillRect(bone.x, bone.y, bone.width, bone.height);
   }
 }
 
-function gameLoop() {
+function moveBones() {
+  for (let bone of bones) {
+    bone.y -= boneSpeed;
+  }
+  bones = bones.filter(b => b.y + b.height > 0);
+}
+
+function checkCollisions() {
+  if (damageCooldown > 0) {
+    damageCooldown--;
+    return;
+  }
+
+  for (let bone of bones) {
+    if (player.x < bone.x + bone.width &&
+        player.x + player.width > bone.x &&
+        player.y < bone.y + bone.height &&
+        player.y + player.height > bone.y) {
+      currentHP -= 10;
+      damageCooldown = 30; // about half a second
+      if (currentHP <= 0) {
+        isDead = true;
+      }
+      break;
+    }
+  }
+}
+
+function update() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  update();
+
+  if (isDead) {
+    drawDeathScreen();
+    return;
+  }
+
+  movePlayer();
+  moveBones();
+  checkCollisions();
+
   drawPlayer();
   drawBones();
   drawHealthBar();
+}
+
+document.addEventListener('keydown', e => keys[e.key] = true);
+document.addEventListener('keyup', e => keys[e.key] = false);
+
+setInterval(() => {
+  if (!isDead) spawnBone();
+}, 1000);
+
+function gameLoop() {
+  update();
   requestAnimationFrame(gameLoop);
 }
 
