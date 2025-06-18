@@ -1,27 +1,35 @@
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Battle Box</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Custom Battle System</title>
   <style>
     body {
       margin: 0;
-      background: black;
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+      overflow: hidden;
+      background-color: black;
     }
     canvas {
-      background-color: #111;
-      border: 3px solid white;
+      display: block;
+    }
+    #deathMessage {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: red;
+      font-size: 48px;
+      font-family: sans-serif;
+      display: none;
+      text-shadow: 2px 2px black;
     }
   </style>
 </head>
 <body>
-  <canvas id="battleCanvas" width="600" height="400" tabindex="1"></canvas>
-  <script src="battle.js"></script>
+  <canvas id="gameCanvas" width="800" height="600"></canvas>
+  <div id="deathMessage">YOU DIED<br><small>Refresh to restart</small></div>
+  <script src="battle_fixed.js"></script>
 </body>
 </html>
