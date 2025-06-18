@@ -1,64 +1,72 @@
 
-const canvas = document.getElementById("battleCanvas");
-const ctx = canvas.getContext("2d");
+const canvas = document.getElementById('battleCanvas');
+const ctx = canvas.getContext('2d');
 
-canvas.width = 600;
-canvas.height = 400;
+canvas.focus();
 
-const soul = {
-  x: canvas.width / 2 - 10,
-  y: canvas.height / 2 - 10,
-  size: 20,
-  speed: 150, // pixels per second
-  color: "red"
+const player = {
+  x: canvas.width / 2,
+  y: canvas.height / 2,
+  width: 20,
+  height: 20,
+  speed: 3,
+  color: 'red',
+  dx: 0,
+  dy: 0,
+  maxHP: 92,
+  currentHP: 92
 };
 
 const keys = {};
-document.addEventListener("keydown", e => keys[e.key.toLowerCase()] = true);
-document.addEventListener("keyup", e => keys[e.key.toLowerCase()] = false);
 
-let lastTime = 0;
+window.addEventListener('keydown', (e) => {
+  keys[e.key] = true;
+});
 
-function update(deltaTime) {
-  const distance = soul.speed * (deltaTime / 1000);
+window.addEventListener('keyup', (e) => {
+  keys[e.key] = false;
+});
 
-  if (keys["arrowup"] || keys["w"]) soul.y -= distance;
-  if (keys["arrowdown"] || keys["s"]) soul.y += distance;
-  if (keys["arrowleft"] || keys["a"]) soul.x -= distance;
-  if (keys["arrowright"] || keys["d"]) soul.x += distance;
+function update() {
+  player.dx = 0;
+  player.dy = 0;
+  if (keys['ArrowLeft'] || keys['a']) player.dx = -player.speed;
+  if (keys['ArrowRight'] || keys['d']) player.dx = player.speed;
+  if (keys['ArrowUp'] || keys['w']) player.dy = -player.speed;
+  if (keys['ArrowDown'] || keys['s']) player.dy = player.speed;
 
-  // Constrain within the canvas
-  soul.x = Math.max(0, Math.min(canvas.width - soul.size, soul.x));
-  soul.y = Math.max(0, Math.min(canvas.height - soul.size, soul.y));
+  player.x += player.dx;
+  player.y += player.dy;
+
+  player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
+  player.y = Math.max(0, Math.min(canvas.height - player.height, player.y));
 }
 
-function draw() {
+function drawPlayer() {
+  ctx.fillStyle = player.color;
+  ctx.fillRect(player.x, player.y, player.width, player.height);
+}
+
+function drawHealthBar() {
+  const barWidth = 200;
+  const barHeight = 20;
+  const x = 10;
+  const y = 10;
+
+  ctx.strokeStyle = 'white';
+  ctx.strokeRect(x, y, barWidth, barHeight);
+
+  const hpRatio = player.currentHP / player.maxHP;
+  ctx.fillStyle = 'orange';
+  ctx.fillRect(x, y, barWidth * hpRatio, barHeight);
+}
+
+function gameLoop() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  // Battle box
-  ctx.strokeStyle = "white";
-  ctx.lineWidth = 3;
-  ctx.strokeRect(0, 0, canvas.width, canvas.height);
-
-  // Soul
-  ctx.fillStyle = soul.color;
-  ctx.fillRect(soul.x, soul.y, soul.size, soul.size);
-
-  // HP bar (for now just a simple one)
-  ctx.fillStyle = "green";
-  ctx.fillRect(10, 10, 100, 10);
-  ctx.strokeStyle = "black";
-  ctx.strokeRect(10, 10, 100, 10);
-}
-
-function gameLoop(timestamp) {
-  if (!lastTime) lastTime = timestamp;
-  const deltaTime = timestamp - lastTime;
-  lastTime = timestamp;
-
-  update(deltaTime);
-  draw();
+  update();
+  drawPlayer();
+  drawHealthBar();
   requestAnimationFrame(gameLoop);
 }
 
-requestAnimationFrame(gameLoop);
+gameLoop();
